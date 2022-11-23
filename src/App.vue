@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 // Setting variables
 const wins = ref(0)
@@ -32,6 +32,7 @@ const outcomes = {
 // Win percentage
 const winPercentage = computed(() => {
   const total = wins.value + draws.value + losses.value
+  console.log((wins.value / total) * 100)
   return total ? (wins.value / total) * 100 : 0
 })
 
@@ -68,9 +69,9 @@ const SaveGame = () => {
 
 // Loading Game
 const LoadGame = () => {
-  wins.value = localStorage.getItem('wins')
-  draws.value = localStorage.getItem('draws')
-  losses.value = localStorage.getItem('losses')
+  wins.value = parseInt(localStorage.getItem('wins')) || 0
+  draws.value = parseInt(localStorage.getItem('draws')) || 0
+  losses.value = parseInt(localStorage.getItem('losses')) || 0
 }
 
 // Resetting round
@@ -79,7 +80,6 @@ const ResetRound = () => {
   computerChoice.value = null
   verdict.value = null
 }
-
 
 onMounted(() => {
   LoadGame()
@@ -95,7 +95,60 @@ onMounted(() => {
 
 <template>
   <div class="bg-gray-700 text-white text-center min-h-screen flex flex-col">
+    <header class="container mx-auto p-6">
+      <h1 class="text-4xl font-bold">Rock | Paper | Scissors</h1>
+    </header>
 
+    <main class="container mx-auto p-6 flex-1">
+      <div v-if="choice === null" class="flex items-center justify-center -mx-6">
+
+        <button 
+          @click="play('rock')"
+          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6
+          transistion-colors duration-300 hover:bg-pink-200 border-4 border-pink-500">
+          <img src="./assets/RockIcon.svg" alt="Rock" class="w-full" />
+        </button>
+
+        <button 
+          @click="play('paper')"
+          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6
+          transistion-colors duration-300 hover:bg-green-200 border-4 border-green-500">
+          <img src="./assets/PaperIcon.svg" alt="Paper" class="w-full" />
+        </button>
+
+        <button 
+          @click="play('scissors')"
+          class="bg-white rounded-full shadow-lg w-64 p-12 mx-6
+          transistion-colors duration-300 hover:bg-yellow-200 border-4 border-yellow-500">
+          <img src="./assets/ScissorsIcon.svg" alt="Scissors" class="w-full" />
+        </button>
+
+      </div>
+
+      <div v-else>
+        <div class="text-3xl mb-4">
+          You picked <span class="text-pink-400">{{ choice }}</span>
+        </div>
+
+        <div class="text-3xl mb-4">
+          The computer picked picked <span class="text-green-400">{{ computerChoice }}</span>
+        </div>
+
+        <div class="text-6xl mb-12">
+          {{ verdict }}
+        </div>
+
+        <button @click="ResetRound" class="bg-pink-400 text-lg py-2 px-4">Reset</button>
+      </div>
+
+      <div class="mt-12 text-2xl mb-4">
+        Wins: {{ wins }} | Draws: {{ draws }} | Losses: {{ losses }}
+      </div>
+
+      <div class="text-lg">
+        Win rate: {{ Math.round(winPercentage) }}%
+      </div>
+    </main>
   </div>
 </template>
 
