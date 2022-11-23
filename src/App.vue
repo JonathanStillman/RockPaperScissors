@@ -142,11 +142,11 @@ onMounted(() => {
       </div>
 
       <div class="mt-12 text-2xl mb-4">
-        Wins: {{ wins }} | Draws: {{ draws }} | Losses: {{ losses }}
+        Wins: <u>{{ wins }}</u> | Draws: <u>{{ draws }}</u> | Losses: <u>{{ losses }}</u>
       </div>
 
       <div class="text-lg">
-        Win rate: {{ Math.round(winPercentage) }}%
+        Win rate: <u>{{ Math.round(winPercentage) }}</u>%
       </div>
     </main>
   </div>
